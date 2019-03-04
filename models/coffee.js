@@ -12,8 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 		description: DataTypes.STRING
 	}, {});
 	Coffee.associate = function(models) {
-		//Coffee belongs to a Shop
-		Coffee.belongsTo(models.Shop, {foreignKey: 'shopId'});
+		Coffee.Shop = Coffee.belongsTo(models.Shop, {foreignKey: 'shopId'});
 	};
 	return Coffee;
 };
