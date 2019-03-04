@@ -15,18 +15,23 @@ const create = (req, res) => {
 		if(util.isUUID(shopId)) {
 			return shop.findByPk(shopId)
 			.then(foundShop => {
-				foundShop.createCoffee(payload)
-				.then(newCoffeeDrink => {
-					return util.sendResponse(res, {
-						data: newCoffeeDrink
-					}, 201);
-				})
-				.catch(err => {
-					console.log(err);
-					return util.sendResponse(res, {
-						message: 'Error occured while saving coffee details.'
-					}, 400);
-				});
+				if(foundShop) {
+					return foundShop.createCoffee(payload)
+					.then(newCoffeeDrink => {
+						return util.sendResponse(res, {
+							data: newCoffeeDrink
+						}, 201);
+					})
+					.catch(err => {
+						console.log(err);
+						return util.sendResponse(res, {
+							message: 'Error occured while saving coffee details.'
+						}, 400);
+					});
+				}
+				return util.sendResponse(res, {
+					message: `Shop with id ${shopId} does not exists.`
+				}, 404);
 			})
 			.catch(err => {
 				console.log(err);
