@@ -57,9 +57,35 @@ const getOptionsFromQuery = (model, paramsObj) => {
 	return option;
 };
 
+const getMissingRequiredParams = (refParams = [], paramsToCheck = {}) => {
+	let missingParams = [];
+	let ptoCheck = Object.keys(paramsToCheck);
+	let prop;
+	for(prop of refParams) {
+		if(!ptoCheck.includes(prop)) {
+			missingParams.push(prop);
+		}
+	}
+	return missingParams;
+};
+
+const getErrorsFrom = (errorList) => {
+	let errors = [];
+	let i, length = errorList.length;
+	for(i = 0; i < length; i++) {
+		errors.push({
+			msg: errorList[i].message,
+			field: `${errorList[i].path}: ${errorList[i].value}`
+		});
+	}
+	return errors;
+};
+
 module.exports = {
 	hasNonNumeral,
 	sendResponse,
 	getOptionsFromQuery,
-	isUUID
+	isUUID,
+	getMissingRequiredParams,
+	getErrorsFrom
 };
